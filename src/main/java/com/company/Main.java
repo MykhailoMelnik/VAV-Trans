@@ -18,13 +18,18 @@ import java.util.Scanner;
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        WriteTollCollect writeTollCollect = new WriteTollCollect();
-
-
+//        WriteTollCollect writeTollCollect = new WriteTollCollect();
+//
 //        SwingFirstMenu swingFirstMenu = new SwingFirstMenu();
 //        swingFirstMenu.setVisible(true);
+
+        File miFile = new File("/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx");
+        FileInputStream fileInputStream = new FileInputStream(miFile);
+        Workbook workbook = new XSSFWorkbook(fileInputStream);
+        String result = String.valueOf(workbook.getSheet("01.02.2021").getRow(5).getCell(15));
+        System.out.println(result);
 
 
     }
