@@ -12,8 +12,8 @@ import java.util.Date;
 public class Invoice {
 
     String SHEET = "01.02.2021";
-    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
-
+    String INVOICE = "C:\\Users\\Professional\\Desktop\\VAV TRANS\\Інвойси 2021 LKW test.xlsx";
+    //  String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
     File miFile = new File(INVOICE);
     FileInputStream fileInputStream = new FileInputStream(miFile);
@@ -32,17 +32,11 @@ public class Invoice {
                 double euroInInvoiceWithEmptyCell = Math.abs(
                         Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
                 Date dataOfCases = sheet.getRow(i).getCell(13).getDateCellValue();
-
                 tollCollect.searchInTollCollect(euroInInvoiceWithEmptyCell, dataOfCases);
             }
-
-
         }
         tollCollect.closeInputStreamTollCollect();
         closeInputStreamInvoice();
-
-
-
     }
 
     public void closeInputStreamInvoice() throws IOException {
