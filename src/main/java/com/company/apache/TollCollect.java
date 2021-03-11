@@ -13,7 +13,7 @@ import java.util.Date;
 public class TollCollect {
     String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023019663.xlsx";
     //String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/Z_EFN_1256149_6023019663.xlsx";
-    public String DATA_TOLL_COLLECT;
+    public String DATA_TOLL_COLLECT = "16.02.2021";
     public Double numberTollCollect;
 
     File miFile = new File(TOLL_COLLECT);
@@ -21,8 +21,7 @@ public class TollCollect {
     Workbook workbook = new XSSFWorkbook(fileInputStream);
     XSSFSheet sheet = (XSSFSheet) workbook.getSheetAt(0);
 
-    public TollCollect(String DATA_TOLL_COLLECT) throws IOException {
-        this.DATA_TOLL_COLLECT = DATA_TOLL_COLLECT;
+    public TollCollect() throws IOException {
         numberTollCollect = sheet.getRow(0).getCell(0).getNumericCellValue();
     }
 

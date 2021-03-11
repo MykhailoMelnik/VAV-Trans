@@ -14,7 +14,7 @@ public class Main {
 //        SwingFirstMenu swingFirstMenu = new SwingFirstMenu();
 //        swingFirstMenu.setVisible(true);
 
-        Invoice invoice = new Invoice(new TollCollect("16.02.2021"));
+        Invoice invoice = new Invoice(new TollCollect(), "01.02.2021");
         invoice.startFound();
 
     }
