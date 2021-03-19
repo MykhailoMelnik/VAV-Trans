@@ -1,7 +1,6 @@
 package com.company;
 
-import com.company.apache.ExelFiles;
-import com.company.apache.Invoice;
+import com.company.apache.Walter;
 import com.company.apache.TollCollect;
 
 import java.io.*;
@@ -9,14 +8,13 @@ import java.io.*;
 
 public class Main {
 
-
     public static void main(String[] args) throws IOException {
 //        SwingFirstMenu swingFirstMenu = new SwingFirstMenu();
 //        swingFirstMenu.setVisible(true);
-
-        Invoice invoice = new Invoice(new TollCollect(), "01.02.2021");
-        invoice.startFound();
+        TollCollect tollCollect = new TollCollect();
+//        Walter invoice = new Walter(tollCollect, "22.03.2021");
+ //       invoice.startFound();
+      tollCollect.summationTollCollectByDates();
 
     }
-
 }

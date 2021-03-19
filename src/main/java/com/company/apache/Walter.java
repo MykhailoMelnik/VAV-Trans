@@ -7,10 +7,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.Date;
 
-public class Invoice {
+public class Walter {
 
     String SHEET;
-    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW test.xlsx";
+    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
     //  String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
     File miFile = new File(INVOICE);
@@ -19,7 +19,7 @@ public class Invoice {
     XSSFSheet sheet;
     TollCollect tollCollect;
 
-    public Invoice(TollCollect tollCollect, String SHEET) throws IOException {
+    public Walter(TollCollect tollCollect, String SHEET) throws IOException {
         this.tollCollect = tollCollect;
         this.SHEET = SHEET;
     }
