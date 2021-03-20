@@ -12,8 +12,8 @@ import java.util.Date;
 
 
 public class TollCollect {
-    String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023170227.xlsx";
-    //String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/Z_EFN_1256149_6023019663.xlsx";
+    //    String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023170227.xlsx";
+    String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/1.xlsx";
     public String DATA_TOLL_COLLECT = "16.03.2021";
     public Double numberTollCollect;
     private int calculationAmounts;
@@ -26,6 +26,7 @@ public class TollCollect {
     public TollCollect() throws IOException {
         numberTollCollect = sheet.getRow(0).getCell(0).getNumericCellValue();
     }
+
 
     public boolean searchInTollCollect(double euroInInvoice, Date dateInInvoice) throws IOException {
 
@@ -50,30 +51,25 @@ public class TollCollect {
     }
 
     public void summationTollCollectByDates() throws IOException {
-        Date dateTollCollect;
-        double calculation;
-        for (int i = 1; i < sheet.getLastRowNum() - 4; i++) {
-            calculation = Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)));
-            dateTollCollect = sheet.getRow(i).getCell(2).getDateCellValue();
 
-            for (int j = i + 1; j < sheet.getLastRowNum()-4; j++) {
-                if (dateTollCollect == sheet.getRow(j).getCell(2).getDateCellValue()) {
-                    calculation += Double.parseDouble(String.valueOf(sheet.getRow(j).getCell(17)));
-                    sheet.shiftRows(j, sheet.getLastRowNum(), -1);
-                    System.out.println("ok");
-                } else {
-                    System.out.println("nex data");
-                    sheet.getRow(i).getCell(17).setCellValue(calculation);
-                    calculation = 0;
-                    FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
-                    workbook.write(outputStream);
-                    outputStream.close();
-                }
+        for (int i = 1; i < sheet.getLastRowNum() - 3; i++) {
+            if (sheet.getRow(i).getCell(2).getDateCellValue()
+                    .equals(sheet.getRow(i + 1).getCell(2).getDateCellValue())) {
+                double calculation = Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)))
+                        + Double.parseDouble(String.valueOf(sheet.getRow(i + 1).getCell(17)));
+
+                sheet.getRow(i + 1).getCell(17).setCellValue(calculation);
+                sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+
+                FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
+                workbook.write(outputStream);
+                outputStream.close();
+                summationTollCollectByDates();
             }
         }
     }
 
-        public void closeInputStreamTollCollect () throws IOException {
-            fileInputStream.close();
-        }
+    public void closeInputStreamTollCollect() throws IOException {
+        fileInputStream.close();
     }
+}

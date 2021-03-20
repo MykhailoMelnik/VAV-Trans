@@ -11,10 +11,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 //        SwingFirstMenu swingFirstMenu = new SwingFirstMenu();
 //        swingFirstMenu.setVisible(true);
-        TollCollect tollCollect = new TollCollect();
-//        Walter invoice = new Walter(tollCollect, "22.03.2021");
- //       invoice.startFound();
-      tollCollect.summationTollCollectByDates();
+
+        Walter walter = new Walter();
+        walter.start("15.02.2021");
+//        tollCollect.summationTollCollectByDates();
 
     }
 }

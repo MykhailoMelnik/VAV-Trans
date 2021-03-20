@@ -10,22 +10,29 @@ import java.util.Date;
 public class Walter {
 
     String SHEET;
-    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
-    //  String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
+    //    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
+    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
     File miFile = new File(INVOICE);
     FileInputStream fileInputStream = new FileInputStream(miFile);
     Workbook workbook = new XSSFWorkbook(fileInputStream);
     XSSFSheet sheet;
-    TollCollect tollCollect;
+    TollCollect tollCollect = new TollCollect();
 
-    public Walter(TollCollect tollCollect, String SHEET) throws IOException {
-        this.tollCollect = tollCollect;
-        this.SHEET = SHEET;
+    public Walter() throws IOException {
+    }
+
+    public void start(String sheetStart) throws IOException {
+        SHEET = sheetStart;
+        startFound();
+        tollCollect.summationTollCollectByDates();
+        SHEET = sheetStart;
+        startFound();
     }
 
     public void startFound() throws IOException {
         sheet = (XSSFSheet) workbook.getSheet(SHEET);
+        System.out.println("Страница " + SHEET);
         for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
             if ((String.valueOf(sheet.getRow(i).getCell(10))).equals("")) {
                 double euroInInvoiceWithEmptyCell = Math.abs(
@@ -36,10 +43,16 @@ public class Walter {
                 }
             }
         }
+
+//        Recursion
+        SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
+        if (sheet.iterator().hasNext() && SHEET.length() > 6) {
+            startFound();
+        }
         tollCollect.closeInputStreamTollCollect();
         closeInputStreamInvoice();
-        System.out.println("Поиск закончен!");
     }
+
 
     public void writeValueToInvoice(int row) throws IOException {
 

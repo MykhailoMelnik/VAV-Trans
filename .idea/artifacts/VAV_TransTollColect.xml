@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="VAV TransTollColect">
+    <output-path>$PROJECT_DIR$/out/artifacts/VAV_TransTollColect</output-path>
+    <root id="root">
+      <element id="archive" name="VAV_TransTollColect.jar">
+        <element id="module-output" name="VAV TransTollColect" />
+      </element>
+    </root>
+  </artifact>
+</component>
