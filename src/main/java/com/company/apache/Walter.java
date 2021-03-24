@@ -5,29 +5,36 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Walter {
 
     String SHEET;
-    //    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
-    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
+    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
+//    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
     File miFile = new File(INVOICE);
     FileInputStream fileInputStream = new FileInputStream(miFile);
     Workbook workbook = new XSSFWorkbook(fileInputStream);
     XSSFSheet sheet;
     TollCollect tollCollect = new TollCollect();
+    double euroInInvoiceWithEmptyCell;
 
     public Walter() throws IOException {
     }
 
     public void start(String sheetStart) throws IOException {
         SHEET = sheetStart;
-        startFound();
+        tollCollect.transformTollCollect();
+        /*startFound();
+        System.out.println("суммирование toll collect начало");
         tollCollect.summationTollCollectByDates();
+        System.out.println("суммирование toll collect закончено");
         SHEET = sheetStart;
-        startFound();
+        startFound();*/
+        countEuroInDocWalterInToCollect();
+
     }
 
     public void startFound() throws IOException {
@@ -43,13 +50,36 @@ public class Walter {
                 }
             }
         }
-
 //        Recursion
         SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
         if (sheet.iterator().hasNext() && SHEET.length() > 6) {
             startFound();
         }
         tollCollect.closeInputStreamTollCollect();
+        closeInputStreamInvoice();
+    }
+
+    public void countEuroInDocWalterInToCollect() throws IOException {
+        sheet = (XSSFSheet) workbook.getSheet(SHEET);
+        System.out.println("Страница " + SHEET);
+        DecimalFormat decimalFormat = new DecimalFormat( "#.###" );
+        String result = decimalFormat.format(euroInInvoiceWithEmptyCell);
+        System.out.println(result);
+
+        for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
+            try {
+                if (tollCollect.numberTollCollect == sheet.getRow(i).getCell(10).getNumericCellValue()) {
+                    euroInInvoiceWithEmptyCell += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
+                }
+
+            } catch (Exception e) {
+            }
+        }
+//        Recursion
+        SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
+        if (sheet.iterator().hasNext() && SHEET.length() > 6) {
+            countEuroInDocWalterInToCollect();
+        }
         closeInputStreamInvoice();
     }
 

@@ -4,16 +4,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 
 
 public class TollCollect {
-    //    String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023170227.xlsx";
-    String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/1.xlsx";
+    String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023170227.xlsx";
+//  String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/1.xlsx";
     public String DATA_TOLL_COLLECT = "16.03.2021";
     public Double numberTollCollect;
     private int calculationAmounts;
@@ -27,6 +24,21 @@ public class TollCollect {
         numberTollCollect = sheet.getRow(0).getCell(0).getNumericCellValue();
     }
 
+    public void transformTollCollect() throws IOException {
+        /*FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
+
+        for (int i = 1; i < sheet.getLastRowNum() - 3; i++) {
+            sheet.getRow(i).getCell(3)
+                    .setCellValue(String.valueOf(sheet.getRow(i).getCell(17)));
+            *//*for (int j = 4; j < 17; j++) {
+                sheet.getRow(i).getCell(j).setCellValue("");
+            }*//*
+        }
+
+        workbook.write(outputStream);
+        outputStream.close();*/
+    }
+
 
     public boolean searchInTollCollect(double euroInInvoice, Date dateInInvoice) throws IOException {
 
@@ -34,7 +46,7 @@ public class TollCollect {
             Date dateTollCollect = sheet.getRow(i).getCell(2).getDateCellValue();
 
             double euroInTollCollect = Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)));
-            if ((dateInInvoice.getTime() - dateTollCollect.getTime()) / 86400000 < 10 &&
+            if ((dateInInvoice.getTime() - dateTollCollect.getTime()) / 86400000 < 7 &&
                     (dateInInvoice.getTime() - dateTollCollect.getTime()) / 86400000 > 0 &&
                     euroInTollCollect == euroInInvoice) {
                 calculationAmounts += 1;
