@@ -13,7 +13,7 @@ public class Main {
 //        swingFirstMenu.setVisible(true);
 
         Walter walter = new Walter();
-        walter.start("15.02.2021");
+        walter.start("19.01.2021");
 //        tollCollect.summationTollCollectByDates();
 
     }

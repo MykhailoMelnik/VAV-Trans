@@ -24,19 +24,19 @@ public class TollCollect {
         numberTollCollect = sheet.getRow(0).getCell(0).getNumericCellValue();
     }
 
+    // TODO: 25.03.2021 try do 
     public void transformTollCollect() throws IOException {
-        /*FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
+       FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
 
         for (int i = 1; i < sheet.getLastRowNum() - 3; i++) {
+            for (int j = 3; j < 17; j++) {
+                sheet.getRow(i).getCell(j).setCellValue("");
+            }
             sheet.getRow(i).getCell(3)
                     .setCellValue(String.valueOf(sheet.getRow(i).getCell(17)));
-            *//*for (int j = 4; j < 17; j++) {
-                sheet.getRow(i).getCell(j).setCellValue("");
-            }*//*
         }
-
         workbook.write(outputStream);
-        outputStream.close();*/
+        outputStream.close();
     }
 
 
@@ -62,6 +62,7 @@ public class TollCollect {
         return false;
     }
 
+    // TODO: 25.03.2021 fix 
     public void summationTollCollectByDates() throws IOException {
 
         for (int i = 1; i < sheet.getLastRowNum() - 3; i++) {

@@ -26,14 +26,14 @@ public class Walter {
 
     public void start(String sheetStart) throws IOException {
         SHEET = sheetStart;
-        tollCollect.transformTollCollect();
-        /*startFound();
+        //tollCollect.transformTollCollect();
+        startFound();
         System.out.println("суммирование toll collect начало");
-        tollCollect.summationTollCollectByDates();
+        //tollCollect.summationTollCollectByDates();
         System.out.println("суммирование toll collect закончено");
         SHEET = sheetStart;
-        startFound();*/
-        countEuroInDocWalterInToCollect();
+        startFound();
+        totalAmountTollCollectInWalter();
 
     }
 
@@ -59,26 +59,29 @@ public class Walter {
         closeInputStreamInvoice();
     }
 
-    public void countEuroInDocWalterInToCollect() throws IOException {
+    public void totalAmountTollCollectInWalter() throws IOException {
+
         sheet = (XSSFSheet) workbook.getSheet(SHEET);
         System.out.println("Страница " + SHEET);
         DecimalFormat decimalFormat = new DecimalFormat( "#.###" );
         String result = decimalFormat.format(euroInInvoiceWithEmptyCell);
+        String resultMinusSumTollCollect = decimalFormat
+                .format(euroInInvoiceWithEmptyCell - tollCollect.sheet.getRow(1).getCell(0).getNumericCellValue());
         System.out.println(result);
+        System.out.println(resultMinusSumTollCollect);
 
         for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
             try {
                 if (tollCollect.numberTollCollect == sheet.getRow(i).getCell(10).getNumericCellValue()) {
                     euroInInvoiceWithEmptyCell += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
                 }
-
             } catch (Exception e) {
             }
         }
 //        Recursion
         SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
         if (sheet.iterator().hasNext() && SHEET.length() > 6) {
-            countEuroInDocWalterInToCollect();
+            totalAmountTollCollectInWalter();
         }
         closeInputStreamInvoice();
     }
