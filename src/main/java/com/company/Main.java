@@ -1,7 +1,6 @@
 package com.company;
 
 import com.company.apache.Walter;
-import com.company.apache.TollCollect;
 
 import java.io.*;
 
@@ -14,6 +13,8 @@ public class Main {
 
         Walter walter = new Walter();
         walter.start("19.01.2021");
+        walter.totalAmountNumberDocInWalter("6023170227");
+        walter.printAfterTotalAmount();
 //        tollCollect.summationTollCollectByDates();
 
     }
