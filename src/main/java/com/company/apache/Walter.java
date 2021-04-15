@@ -5,13 +5,16 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Walter {
 
     String SHEET;
-    String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
+    static String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
 //    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
     File miFile = new File(INVOICE);
@@ -44,7 +47,7 @@ public class Walter {
         for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
             if ((String.valueOf(sheet.getRow(i).getCell(10))).equals("")) {
                 double euroInInvoiceWithEmptyCell = Math.abs(
-                        Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
+                        Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17))));
                 Date dataOfCases = sheet.getRow(i).getCell(13).getDateCellValue();
                 if (tollCollect.searchInTollCollect(euroInInvoiceWithEmptyCell, dataOfCases)) {
                     writeValueToInvoice(i);
@@ -66,13 +69,14 @@ public class Walter {
         for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
             try {
                 if (Long.parseLong(numberDoc) == sheet.getRow(i).getCell(10).getNumericCellValue()) {
-                    countAmountDoc += 1;;
-                    sumDoc += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
+                    countAmountDoc += 1;
+
+                    sumDoc += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17))));
                 }
             } catch (Exception e) {
                 if (String.valueOf(sheet.getRow(i).getCell(10)).equals(numberDoc)) {
                     countAmountDoc += 1;
-                    sumDoc += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(15))));
+                    sumDoc += Math.abs(Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17))));
                 }
             }
         }
@@ -104,6 +108,79 @@ public class Walter {
         FileOutputStream out = new FileOutputStream(INVOICE);
         workbook.write(out);
         out.close();
+    }
+
+    static public boolean foundNumberInWalterAfterSummation(double summaInTollAfterCalculateByDate) {
+
+        return false;
+    }
+
+    public void foundAndWritIDS() throws IOException {
+        while (true) {
+            SHEET = "29.03.2021";
+            sheet = (XSSFSheet) workbook.getSheet(SHEET);
+
+            System.out.println("введіть число");
+            Scanner scanner = new Scanner(System.in);
+            double sum = scanner.nextDouble();
+            System.out.println("1-DKK, 2-GER, 3-LUX, 4-SPAIN, 5-FRAN");
+            double scale = Math.pow(10, 2);
+            switch (scanner.nextInt()) {
+                case (1):
+                    System.out.println(sum);
+                    break;
+                case (2):
+                    sum += sum / 100 * 19;
+                    sum = Math.ceil(sum * scale) / scale;
+                    sum = new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    System.out.println(sum);
+                    break;
+                case (3):
+                    sum += sum / 100 * 17;
+                    sum = Math.ceil(sum * scale) / scale;
+                    sum = new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    System.out.println(sum);
+                    break;
+                case (4):
+                    sum += sum / 100 * 21;
+                    sum = Math.ceil(sum * scale) / scale;
+                    sum = new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    System.out.println(sum);
+                    break;
+                case (5):
+                    sum += sum / 100 * 20;
+                    sum = Math.ceil(sum * scale) / scale;
+                    sum = new BigDecimal(sum).setScale(2, RoundingMode.HALF_UP).doubleValue();
+                    System.out.println(sum);
+                    break;
+            }
+
+            while (sheet.iterator().hasNext() && SHEET.length() > 6) {
+
+                for (int i = 4; String.valueOf(sheet.getRow(i).getCell(13)).length() != 0; i++) {
+
+                    if ((String.valueOf(sheet.getRow(i).getCell(10))).equals("") && Math.abs(
+                            Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)))) == sum) {
+                        System.err.println("Страница " + SHEET);
+                        System.err.println("нашов " + Math.abs(
+                                Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)))));
+
+                        sheet.getRow(i).getCell(10).setCellValue("DE00574498");
+                        sheet.getRow(i).getCell(11).setCellValue("2021-03-31");
+                        sheet.getRow(i).getCell(12).setCellValue("Q8");
+
+                        FileOutputStream out = new FileOutputStream(INVOICE);
+                        workbook.write(out);
+                        out.close();
+                        break;
+                    }
+                }
+
+                SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
+                sheet = (XSSFSheet) workbook.getSheet(SHEET);
+                closeInputStreamInvoice();
+            }
+        }
     }
 
     public void closeInputStreamInvoice() throws IOException {
