@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class Walter {
 
     String SHEET;
+    String SHEETStart;
     static String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
 //    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
 
@@ -28,10 +29,15 @@ public class Walter {
     int countAmountDoc;
 
     public Walter() throws IOException {
+
     }
 
     public void start(String sheetStart) throws IOException {
+        SHEETStart = sheetStart;
+        //SHEET = sheetStart;
+        //startFound();
         SHEET = sheetStart;
+        tollCollect.summationTollCollectByDates(this);
         //tollCollect.transformTollCollect();
         // startFound();
         // System.out.println("суммирование toll collect начало");
@@ -110,8 +116,31 @@ public class Walter {
         out.close();
     }
 
-    static public boolean foundNumberInWalterAfterSummation(double summaInTollAfterCalculateByDate) {
+    public boolean foundNumberInWalterAfterSummation(double summaInTollAfterCalculateByDate, Date dateTollCollect) throws IOException {
 
+        SHEET = SHEETStart;
+        while (SHEET.length() > 6) {
+            sheet = (XSSFSheet) workbook.getSheet(SHEET);
+            for (int i = 4; String.valueOf(sheet.getRow(i).getCell(9)).length() != 0; i++) {
+                if ((String.valueOf(sheet.getRow(i).getCell(10))).equals("")) {
+
+                    double euroInInvoiceWithEmptyCell = Math.abs(
+                            Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17))));
+                    Date dateInInvoice = sheet.getRow(i).getCell(13).getDateCellValue();
+
+                    if (euroInInvoiceWithEmptyCell == summaInTollAfterCalculateByDate
+                            && (dateInInvoice.getTime() - dateTollCollect.getTime()) / 86400000 < 7 &&
+                            (dateInInvoice.getTime() - dateTollCollect.getTime()) / 86400000 > 0) {
+
+                        writeValueToInvoice(i);
+                        closeInputStreamInvoice();
+                        System.out.println(summaInTollAfterCalculateByDate + " найдено на странице " + SHEET);
+                        return true;
+                    }
+                }
+            }
+            SHEET = workbook.getSheetName(workbook.getSheetIndex(sheet) + 1);
+        }
         return false;
     }
 
