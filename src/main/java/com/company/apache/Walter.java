@@ -15,8 +15,8 @@ public class Walter {
 
     String SHEET;
     String SHEETStart;
-    static String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
-//    String INVOICE = "/Users/mihajlomelnik/Documents/VAV TRANS/Інвойси 2021 LKW !.xlsx";
+//    static String INVOICE = "C:\\Users\\Professional\\Desktop\\Git\\Інвойси 2021 LKW.xlsx";
+    String INVOICE = "/Users/mihajlomelnik/IdeaProjects/VAV-Trans/Інвойси 2021 LKW.xlsx";
 
     File miFile = new File(INVOICE);
     FileInputStream fileInputStream = new FileInputStream(miFile);
@@ -34,8 +34,8 @@ public class Walter {
 
     public void start(String sheetStart) throws IOException {
         SHEETStart = sheetStart;
-        //SHEET = sheetStart;
-        //startFound();
+        SHEET = sheetStart;
+        startFound();
         SHEET = sheetStart;
         tollCollect.summationTollCollectByDates(this);
         //tollCollect.transformTollCollect();
@@ -134,7 +134,7 @@ public class Walter {
 
                         writeValueToInvoice(i);
                         closeInputStreamInvoice();
-                        System.out.println(summaInTollAfterCalculateByDate + " найдено на странице " + SHEET);
+                        System.out.println(summaInTollAfterCalculateByDate + " странице " + SHEET);
                         return true;
                     }
                 }

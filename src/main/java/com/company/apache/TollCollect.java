@@ -9,8 +9,8 @@ import java.util.Date;
 
 
 public class TollCollect {
-    static String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023306181.xlsx";
-    //  String TOLL_COLLECT = "/Users/mihajlomelnik/Documents/VAV TRANS/1.xlsx";
+//    static String TOLL_COLLECT = "C:\\Users\\Professional\\Desktop\\Git\\6023306181.xlsx";
+      String TOLL_COLLECT = "/Users/mihajlomelnik/IdeaProjects/VAV-Trans/6023306181.xlsx";
     public String DATA_TOLL_COLLECT = "16.04.2021";
     public Double numberTollCollect;
     private int calculationAmounts;
@@ -67,20 +67,23 @@ public class TollCollect {
         double calculation = 0;
         for (int i = 1; i < sheet.getLastRowNum() - 3; i++) {
 
-            int rowStart;
+            int rowStart = 0;
             if (sheet.getRow(i).getCell(2).getDateCellValue()
                     .equals(sheet.getRow(i + 1).getCell(2).getDateCellValue())) {
-                rowStart = i;
+                rowStart -= 1;
                 calculation += Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)));
             } else {
                 calculation += Double.parseDouble(String.valueOf(sheet.getRow(i).getCell(17)));
                 Date dataDayInToll = sheet.getRow(i).getCell(2).getDateCellValue();
+                rowStart -= 1;
                 if (walter.foundNumberInWalterAfterSummation(calculation, dataDayInToll)) {
-                    System.out.println("нашло суму вернуло тру "+calculation);
+                    System.out.println("нашло суму вернуло тру " + calculation);
 
+                    sheet.shiftRows(i+1, sheet.getLastRowNum(), rowStart-2);
+                    FileOutputStream outputStream = new FileOutputStream(TOLL_COLLECT);
+                    workbook.write(outputStream);
+                    outputStream.close();
 
-                    // sheet.getRow(i + 1).getCell(17).setCellValue(calculation);
-                    // sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
                 }
                 calculation = 0;
             }
